@@ -1,4 +1,4 @@
-package com.bgmsoft.shin.ui.share
+package com.bgmsoft.shin.ui.main.share
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

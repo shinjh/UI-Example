@@ -1,4 +1,4 @@
-package com.bgmsoft.shin.ui.tools
+package com.bgmsoft.shin.ui.main.tools
 
 import android.os.Bundle
 import android.view.LayoutInflater

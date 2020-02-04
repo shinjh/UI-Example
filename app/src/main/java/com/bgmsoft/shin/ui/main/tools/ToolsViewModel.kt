@@ -1,4 +1,4 @@
-package com.bgmsoft.shin.ui.tools
+package com.bgmsoft.shin.ui.main.tools
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
