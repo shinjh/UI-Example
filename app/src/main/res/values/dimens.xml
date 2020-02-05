@@ -8,4 +8,6 @@
 
     <!-- Recycler View -->
     <dimen name="rv_default_height">60dp</dimen>
+    <dimen name="rv_expand_height">120dp</dimen>
+    <dimen name="rv_expand_total_height">180dp</dimen>
 </resources>

@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/rv_default_height"
         android:layout_margin="8dp"
-        android:background="@color/item_background"
+        android:background="@color/item_background_d"
         android:paddingStart="8dp"
         android:paddingEnd="8dp">
 

@@ -62,6 +62,13 @@ class RvExampleFragment : Fragment() {
                 (rv_example_recyclerview.adapter as RvExampleDefaultAdapter).removeTask(viewHolder.adapterPosition)
             }
 
+            override fun getSwipeDirs(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+                // Header, Footer 에서는 동작하지 않도록 처리
+                return if (viewHolder is RvExampleDefaultAdapter.TaskViewHolder)
+                    super.getSwipeDirs(recyclerView, viewHolder)
+                else
+                    0
+            }
         }).apply {
             // ItemTouchHelper에 RecyclerView 설정
             attachToRecyclerView(rv_example_recyclerview)

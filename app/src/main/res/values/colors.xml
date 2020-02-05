@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
 
     <!-- Recycler View Example -->
-    <color name="item_background">#f3f3f3</color>
+    <color name="item_background_d">#f3f3f3</color>
+    <color name="item_background_e">#e3f3f3</color>
 
 </resources>

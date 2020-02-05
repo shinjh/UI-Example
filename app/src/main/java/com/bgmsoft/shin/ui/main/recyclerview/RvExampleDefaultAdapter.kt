@@ -1,5 +1,6 @@
 package com.bgmsoft.shin.ui.main.recyclerview
 
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +19,14 @@ class RvExampleDefaultAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
 
     private val TYPE_FOOTER = 2
 
-
-    // 내부 데이터
+    // 아이템 데이터 리스트
     private var tasks: ArrayList<Task> = arrayListOf()
+
+    // 선택 데이터 리스트
+    private var selectedItems: SparseBooleanArray = SparseBooleanArray()
+
+    // 아이템 동작과 외부를 연결하기 위한 콜백
+    private var listener: OnItemInteractionListener? = null
 
     // onCreateViewHolder에서 inflate하는 부분을 간단하게 하기 위해 추가
     private fun ViewGroup.inflate(layoutRes: Int): View = LayoutInflater.from(context).inflate(layoutRes, this, false)
@@ -53,12 +59,16 @@ class RvExampleDefaultAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
         when (holder) {
             is HeaderViewHolder -> {
                 holder.itemView.setOnClickListener {
+                    listener?.onClickHeader()
+
                     Snackbar.make(it, "Header is Clicked!!", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show()
                 }
             }
             is FooterViewHolder -> {
                 holder.itemView.setOnClickListener {
+                    listener?.onClickFooter()
+
                     Snackbar.make(it, "Footer is Clicked!!", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show()
                 }
@@ -66,11 +76,26 @@ class RvExampleDefaultAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
             else -> {
                 val item = tasks[position - 1]
 
-                // 내부 데이터를 사용하여 각 아이템 값 설정
+                // 아이 데이터를 사용하여 각 아이템 값 설정
                 holder.itemView.apply {
                     tv_item_default_name.text = item.name
                     tv_item_default_details.text = item.details
                     iv_item_default_img.setImageFromUrl(item.image)
+
+                    setOnClickListener {
+                        if (selectedItems.get(position)) {
+                            // VISIBLE -> INVISIBLE
+                            selectedItems.delete(position)
+
+                            cl_item_expand.visibility = View.GONE
+
+                        } else {
+                            // INVISIBLE -> VISIBLE
+                            selectedItems.put(position, true)
+
+                            cl_item_expand.visibility = View.VISIBLE
+                        }
+                    }
                 }
             }
         }
@@ -93,13 +118,26 @@ class RvExampleDefaultAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
 
     // 내부 데이터 값 제거
     fun removeTask(position: Int) {
-        tasks.removeAt(position)
+        tasks.removeAt(position - 1)
 
         notifyDataSetChanged()
     }
 
-    // Item Type에 따른 View Holder Class
+    fun setOnItemInteractionListener(listener: OnItemInteractionListener) {
+        this.listener = listener
+    }
+
+    interface OnItemInteractionListener {
+        fun onClickHeader()
+        fun onClickFooter()
+    }
+
+    /**
+     * Item Type에 따른 View Holder Class
+     */
     class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
     class FooterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }
