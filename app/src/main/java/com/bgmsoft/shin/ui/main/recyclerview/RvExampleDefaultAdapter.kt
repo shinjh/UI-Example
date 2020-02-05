@@ -7,35 +7,72 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bgmsoft.shin.R
 import com.bgmsoft.shin.extension.setImageFromUrl
 import com.bgmsoft.shin.model.Task
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.item_recyclerview_default.view.*
 
 class RvExampleDefaultAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    // 유효하지 않은 위치에 대한 값
-    private val INVALID_POSITION = -1
+    private val TYPE_HEADER = 0
+
+    private val TYPE_ITEM = 1
+
+    private val TYPE_FOOTER = 2
+
 
     // 내부 데이터
     private var tasks: ArrayList<Task> = arrayListOf()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_recyclerview_default, parent, false)
+    // onCreateViewHolder에서 inflate하는 부분을 간단하게 하기 위해 추가
+    private fun ViewGroup.inflate(layoutRes: Int): View = LayoutInflater.from(context).inflate(layoutRes, this, false)
 
-        return TaskViewHolder(view)
+    // 각 View의 Type에 따른 ViewHolder 반환
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            TYPE_HEADER -> HeaderViewHolder(parent.inflate(R.layout.item_recyclerview_header))
+            TYPE_FOOTER -> FooterViewHolder(parent.inflate(R.layout.item_recyclerview_footer))
+            else -> TaskViewHolder(parent.inflate(R.layout.item_recyclerview_default))
+        }
     }
 
+    // 아이템의 전체 갯수 + Header(1) + Footer(1)
     override fun getItemCount(): Int {
-        return tasks.size
+        return tasks.size + 2
+    }
+
+    // 아이템의 타입을 반환 (position은 0 기반이므로 [전체 갯수 - 1]일 경우에 Footer 타입 반환)
+    override fun getItemViewType(position: Int): Int {
+        return when (position) {
+            0 -> TYPE_HEADER
+            itemCount - 1 -> TYPE_FOOTER
+            else -> TYPE_ITEM
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = tasks[position]
+        // Holder에 따른 Binding 처리
+        when (holder) {
+            is HeaderViewHolder -> {
+                holder.itemView.setOnClickListener {
+                    Snackbar.make(it, "Header is Clicked!!", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show()
+                }
+            }
+            is FooterViewHolder -> {
+                holder.itemView.setOnClickListener {
+                    Snackbar.make(it, "Footer is Clicked!!", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show()
+                }
+            }
+            else -> {
+                val item = tasks[position - 1]
 
-        // 내부 데이터를 사용하여 각 아이템 값 설정
-        holder.itemView.apply {
-            tv_item_default_name.text = item.name
-            tv_item_default_details.text = item.details
-            iv_item_default_img.setImageFromUrl(item.image)
+                // 내부 데이터를 사용하여 각 아이템 값 설정
+                holder.itemView.apply {
+                    tv_item_default_name.text = item.name
+                    tv_item_default_details.text = item.details
+                    iv_item_default_img.setImageFromUrl(item.image)
+                }
+            }
         }
     }
 
@@ -61,6 +98,8 @@ class RvExampleDefaultAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
         notifyDataSetChanged()
     }
 
-    // View Holder
+    // Item Type에 따른 View Holder Class
+    class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class FooterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }
