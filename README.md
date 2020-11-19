@@ -1,17 +1,8 @@
-# 1. Project guidelines
+# 1. Project Guideline
 
-## 1.1 Project structure
+## 1.1 File naming
 
-New projects should follow the Android Gradle project structure that is defined on the [Android Gradle plugin user guide](http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Project-Structure). The [ribot Boilerplate](https://github.com/ribot/android-boilerplate) project is a good reference to start from.
-
-## 1.2 File naming
-
-### 1.2.1 Class files
-Class names are written in [UpperCamelCase](http://en.wikipedia.org/wiki/CamelCase).
-
-For classes that extend an Android component, the name of the class should end with the name of the component; for example: `SignInActivity`, `SignInFragment`, `ImageUploaderService`, `ChangePasswordDialog`.
-
-### 1.2.2 Resources files
+### 1.1.1 Resources files
 
 Resources file names are written in __lowercase_underscore__.
 
